@@ -1,0 +1,200 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model products {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Int
+  rating      Float
+  isNew       Boolean
+  isHot       Boolean
+  discount    Float
+  oldPrice    Float
+  stock       Int
+  status      STATUS
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model categories {
+  id          Int      @id @default(autoincrement())
+  shopId      Int
+  name        String
+  description String
+  image       String
+  icon        String
+  status      STATUS
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model shops {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  name        String
+  phone       String
+  logo        String
+  email       String
+  description String
+  latitute    Float
+  longitude   Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model users {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  fcmToken  String
+  role      ROLE
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model admins {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  name      String
+  phone     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model deliveries {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  name          String
+  phone         String
+  email         String
+  documentation String
+  profileImage  String
+  status        STATUS
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model carts {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model wishlists {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model addresses {
+  id         Int      @id @default(autoincrement())
+  customerId Int
+  name       String
+  phone      String
+  postalCode String
+  province   String
+  district   String
+  address    String
+  latitute   Float
+  longitude  Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model orders {
+  id          Int      @id @default(autoincrement())
+  customerId  Int
+  addressId   Int
+  deliveryId  Int
+  shopId      Int
+  paymentType String
+  subTotal    Float
+  tax         Float
+  totalPrice  Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model orderItems {
+  id        Int      @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model orderShops {
+  id         Int      @id @default(autoincrement())
+  orderId    Int
+  shopId     Int
+  subTotal   Float
+  tax        Float
+  totalPrice Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model sliders {
+  id        Int      @id @default(autoincrement())
+  name      String
+  image     String
+  status    STATUS
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model images {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  name      String
+  path      String
+  size      Int
+  type      String
+  image     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model customers {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  phone     String
+  midleName String
+  firstName String
+  lastName  String
+  online    STATUS
+  image     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ROLE {
+  SHOP
+  DELLIVERY
+  CUSTOMER
+  ADMIN
+}
+
+enum STATUS {
+  ACTIVE
+  INACTIVE
+  STOCKOUT
+}
